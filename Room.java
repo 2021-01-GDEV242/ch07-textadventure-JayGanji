@@ -12,8 +12,8 @@ import java.util.Iterator;
  * connected to other rooms via exits.  For each existing exit, the room 
  * stores a reference to the neighboring room.
  * 
- * @author  Michael Kölling and David J. Barnes
- * @version 2016.02.29
+ * @author  Michael Kölling and David J. Barnes modified by Jay Ganji
+ * @version 2021.03.22
  */
 
 public class Room 
@@ -87,6 +87,16 @@ public class Room
     public Room getExit(String direction) 
     {
         return exits.get(direction);
+    }
+    
+    /**
+     * Add an item in a certain room
+     * @param description of the item
+     * @param weight of the item
+     */
+    public void addItem(String description, int weight)
+    {
+        Item itemName = new Item(description, weight);
     }
 }
 

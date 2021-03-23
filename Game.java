@@ -11,15 +11,24 @@
  *  rooms, creates the parser and starts the game.  It also evaluates and
  *  executes the commands that the parser returns.
  * 
- * @author  Michael Kölling and David J. Barnes
- * @version 2016.02.29
+ * @author  Michael Kölling and David J. Barnes modified by Jay Ganji
+ * @version 2021.03.22
  */
 
 public class Game 
 {
     private Parser parser;
     private Room currentRoom;
-        
+    
+    /**
+     * Allows the game to be run without BlueJ
+     */
+    public static void main(String[] args) 
+    {
+        Game newGame = new Game();
+        newGame.play();
+    }
+    
     /**
      * Create the game and initialise its internal map.
      */
@@ -34,30 +43,82 @@ public class Game
      */
     private void createRooms()
     {
-        Room outside, theater, pub, lab, office;
+        Room cell, firstHallwayMain, firstHallwayEast,
+        firstHallwayWest, firstHallwayWestCell, firstHallwayMainCell,
+        firstHallwayEastCell, westHallway, westHallwayCell, eastHallway,
+        eastHallwayCell, westHallwayUpper, eastHallwayUpper,
+        westHallwayUpperCell, eastHallwayUpperCell, westHallwayHovel,
+        eastHallwayExit;
       
         // create the rooms
-        outside = new Room("outside the main entrance of the university");
-        theater = new Room("in a lecture theater");
-        pub = new Room("in the campus pub");
-        lab = new Room("in a computing lab");
-        office = new Room("in the computing admin office");
+        cell = new Room("in a barren room with stone walls and no windows.");
+        firstHallwayMain = new Room("in a dimly lit hallway with entrances"
+            + " to other cells.");
+        firstHallwayMainCell = new Room("in a cell situated opposite to yours."
+            + " Looks very much like yours.");
+        firstHallwayWest = new Room("in the western part of the hallway"
+            + " outside your cell.");
+        firstHallwayWestCell = new Room("in another cell in this prison, much"
+            + " like yours.");
+        firstHallwayEast = new Room("in the eastern part of the hallway"
+            + " outside your cell.");    
+        firstHallwayEastCell = new Room("in another cell in this prison, much"
+            + " like yours.");
+        westHallway = new Room("in another hallway, which its way to you, "
+            + "perpendicular to the previous one.");
+        westHallwayCell = new Room("in another cell in this prison, much"
+            + " like yours.");
+        eastHallway = new Room("in another hallway, which opens its way to you, "
+            + "perpendicular to the previous one.");
+        eastHallwayCell = new Room("in another cell in this prison, much"
+            + " like yours.");
+        westHallwayUpper = new Room("in the same hallway continuing north, sloping up.");
+        eastHallwayUpper = new Room("in the same hallway continuing north, sloping up.");
+        westHallwayUpperCell = new Room("in another cell in this prison, much"
+            + " like yours.");
+        eastHallwayUpperCell = new Room("in another cell in this prison, much"
+            + " like yours.");
+        westHallwayHovel = new Room("in a strange hole in the wall "
+            + "surrounded by dirt, and very dark.");
+        eastHallwayExit = new Room("in the outside"
+            + " world. Congratulations!");
+        
         
         // initialise room exits
-        outside.setExit("east", theater);
-        outside.setExit("south", lab);
-        outside.setExit("west", pub);
+        cell.setExit("north", firstHallwayMain);
+        firstHallwayMain.setExit("south", cell);
+        firstHallwayMain.setExit("north", firstHallwayMainCell);
+        firstHallwayMain.setExit("west", firstHallwayWest);
+        firstHallwayMain.setExit("east", firstHallwayEast);
+        firstHallwayMainCell.setExit("south", firstHallwayMain);
+        firstHallwayWest.setExit("north", firstHallwayWestCell);
+        firstHallwayWest.setExit("east", firstHallwayMain);
+        firstHallwayWest.setExit("west", westHallway);
+        firstHallwayWestCell.setExit("south", firstHallwayWest);
+        westHallway.setExit("east", firstHallwayWest);
+        westHallway.setExit("south", westHallwayCell);
+        westHallway.setExit("north", westHallwayUpper);
+        westHallwayCell.setExit("north", westHallway);
+        westHallwayUpper.setExit("south", westHallway);
+        westHallwayUpper.setExit("east", westHallwayUpperCell);
+        westHallwayUpper.setExit("north", westHallwayHovel);
+        westHallwayHovel.setExit("south", westHallwayUpper);
+        firstHallwayEast.setExit("north", firstHallwayEastCell);
+        firstHallwayEast.setExit("west", firstHallwayMain);
+        firstHallwayEast.setExit("East", eastHallway);
+        firstHallwayEastCell.setExit("south", firstHallwayEast);
+        eastHallway.setExit("west", firstHallwayEast);
+        eastHallway.setExit("south", eastHallwayCell);
+        eastHallway.setExit("north", eastHallwayUpper);
+        eastHallwayCell.setExit("north", eastHallway);
+        eastHallwayUpper.setExit("south", eastHallway);
+        eastHallwayUpper.setExit("west", eastHallwayUpperCell);
+        eastHallwayUpper.setExit("north", eastHallwayExit);
+        eastHallwayExit.setExit("south", eastHallwayUpper);
+        
+        westHallwayHovel.addItem("a small shiny metal key",1);
 
-        theater.setExit("west", outside);
-
-        pub.setExit("east", outside);
-
-        lab.setExit("north", outside);
-        lab.setExit("east", office);
-
-        office.setExit("west", lab);
-
-        currentRoom = outside;  // start game outside
+        currentRoom = cell;  // start game in cell
     }
 
     /**
@@ -86,6 +147,8 @@ public class Game
         System.out.println();
         System.out.println("Welcome to the World of Zuul!");
         System.out.println("World of Zuul is a new, incredibly boring adventure game.");
+        System.out.println("You woke up in your prison cell, with amnesia.");
+        System.out.println("There is no one else in this prison. Try to find the exit.");
         System.out.println("Type '" + CommandWord.HELP + "' if you need help.");
         System.out.println();
         System.out.println(currentRoom.getLongDescription());
@@ -114,6 +177,14 @@ public class Game
             case GO:
                 goRoom(command);
                 break;
+                
+            case LOOK:
+                System.out.println(currentRoom.getLongDescription());
+                break;
+                
+            case EAT:
+                System.out.println("You have eaten and are now full.");
+                break;    
 
             case QUIT:
                 wantToQuit = quit(command);
